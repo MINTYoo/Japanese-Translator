@@ -3,7 +3,15 @@
 #include<string>
 #include <unordered_map>
 using namespace std;
-
+void story();
+void S();
+void after_subject();
+void after_noun();
+void after_object();
+void noun();
+void verb();
+void be();
+void tense();
 /* Look for all **'s and complete them */
 
 //=====================================================
@@ -11,7 +19,7 @@ using namespace std;
 //=====================================================
 
 // TABLES Done by: Ruben Cerda, Jose Romero
-string saved_token,saved_lexeme;
+string saved_token, saved_lexeme;
 bool token_available = false;
 std::unordered_map<std::string, std::string> reservedWords = {
         {"masu", "VERB"},
@@ -204,7 +212,7 @@ bool word(string& token_type,string& s)
       }
       //q0q1 Transitions
       else if(state == 7){
-        if(state = 7 && Vowel(s[charpos])){ //looping back to same state
+        if(state == 7 && Vowel(s[charpos])){ //looping back to same state
           state = 7;
         }
         else if(s[charpos] == 'n'){
@@ -288,134 +296,44 @@ bool period(string s)
   if (state == 1)return true;  // end in a final state 
   else return false; 
 }
-
-
-unordered_map<string, string> position; //global hashtable(WILL NOT BE USED FOR SUBMISSION)
-//Token and reserved words tables //global tables
-int scannerForReadingFile(string& , string& );//(WILL NOT BE USED FOR SUBMISSION) only for reading from a file
-void read(); //(WILL NOT BE USED FOR SUBMISSION)
-//Token and reserved words tables //global tables
-int scanner(string& ,string& );  // to be called by main
+void s();
+void afterSubject();
+void afterNoun();
+void afterObject();
+void noun();
+void verb();
+void be();
+void tense();
 fstream fin;   // file stream to use
-int main()
-{ string filename;
-  string theword; //string to get input
-  cout << "Enter the input file name:"; //get the name of the file to read from
-  cin >> filename; 
-  //string token_type;
-  fin.open( filename.c_str(), fstream::in);
-  read(); //read in the file from ReservedWords.txt(note this is only used for reading from a file, in our case we are hardcoding reservedwords when submitting)
-  while (true)  // keep on going 
-    {
-      //call scanner to check the input string 
-      scanner(token_type,theword);  
-
-      //file use only
-      //scannerForReadingFile(InputWord);
-      if (theword == "eofm") {
-        break; // Exit the loop when EOFM or eofm is encountered
-      }
-      cout << "is token type " << token_type << endl;
-
-
-    }
-
-  cout << "End of File encountered" << endl;  
-  fin.close();
-}// end of main 
-
-// Scanner processes only one word each time it is called
-// Gives back the token type and the word itself
-// ** Done by: Ruben Cerda, Jose Romero
-
 int scanner(string& token_type,string& w)
 {
   cout << endl;
   fin >> w;  // grab next word 
   //check if token
+  cout << "Scanner called using word: " << w << endl;
   if(isReserveWord(token_type,w)){//check for any reserved words, so we don't start checking for word1, word2, and final states
-    cout << "\"" << w << "\" ";  
     return 0;
   }
   if(word(token_type,w)){ //check transition for final states
-    cout << "\"" << w << "\" ";  
     return 0;
   }
   else if (period(w)) //period case
   {
-    cout << "\"" << w << "\" ";  
     token_type = "PERIOD";
     return 0;
   }
   else if( w == "EOFM" || w  == "eofm"){
+      token_type = "eofm";
       return 0;
   }
 
   else //none of the FAs returned true
     { cout << "Lexical Error: " << w << " is not a valid token" << endl;
-      cout << "\"" << w << "\" ";
       token_type = "ERROR";
       return -1;
       }
 
 }//the very end of scanner
-
-
-
-//populate hash table with reserved words
-//(WILL NOT BE USED FOR SUBMISSION)
-void read(){
-  ifstream fin;
-  string word, token;
-  fin.open("ReservedWords.txt");
-  while (fin >> word >> token && (word != "eofm" || token != "EOFM")) {
-    //Map the word to its corresponding token type string and store it in the unordered_map.
-    position[word] = token;
-  }
-  //testing purposes
-  //Traversing an unordered map 
-  /*
-  for (auto x : position){
-     cout << x.first << " " << x.second << endl;
-  }
-  */
-  fin.close();
-}
-
-
-//(WILL NOT BE USED FOR SUBMISSION) only use when reading from a file
-int scannerForReadingFile(string& token_type, string& w)
-{
-  cout << endl;
-  cout << ".....ScannerForReadingFile was called..." << endl;
-
-  fin >> w;  // grab next word 
-  cout << "\"" << w << "\" ";  
-  //check if token
-   if(position.find(w) != position.end()) {
-    token_type = position[w];
-    return 0;
-  }
-  if (word(token_type,w)) {
-    return 0;
-  } 
-  else if (period(w)) {
-    token_type = "PERIOD";
-    return 0;
-  } 
-   // Check if identifier using the unordered_map
-
-  // Add other if-then cases here to go through other FAs and set the_type to IDENT, REAL, or INT.
-  else {
-    cout << "Lexical Error: " << w << " is not a valid token" << endl;
-    cout << "\"" << w << "\"";
-    token_type = "ERROR";
-    return -1;
-  }
-
-}//the very end of scanner
-
-
 /* INSTRUCTION: Complete all ** parts.
 You may use any method to connect this file to scanner.cpp
 that you had written.
@@ -432,13 +350,18 @@ cat scanner.cpp parser.cpp > myparser.cpp
 // to display syntax error messages as specified by me.
 // Type of error: **
 // Done by: **
-void syntaxerror1( ){ }
+void syntaxerror1(string word, string unexpected){ 
+  cout << "\nSYNTAX ERROR: unexpected " << word << " found in " << unexpected << endl;
+  exit(1);
+}
 // Type of error: **
 // Done by: **
-void syntaxerror2( ) { 
-
+void syntaxerror2(string word, string unexpected ) { 
+  cout << "\nSYNTAX ERROR: unexpected " << word << " found in " << unexpected << endl;
+  exit(1);
 
 }
+
 // ** Need the updated match and next_token with 2 global vars
 // saved_token and saved_lexeme
 // Purpose: **
@@ -455,33 +378,207 @@ string next_token(){
 }
 // Purpose: **
 // Done by: Ruben Cerda
-boolean match(tokentype expected) {
+bool match(string expected) {
     if(next_token() != expected){
-        syntaxerror1(saved_lexeme,expected);
+      if(next_token() == "ERROR"){
+        syntaxerror1(saved_lexeme, expected);
         return false;
+      }
     }
     else{
         token_available = false;
         return true;
     }
 }
+
 // ----- RDP functions - one per non-term -------------------
 // ** Make each non-terminal into a function here
 // ** Be sure to put the corresponding grammar rule above each function
 // ** Be sure to put the name of the programmer above each function
 // Grammar: **
 // Done by: **
+void story()
+{
+   cout << "Processing <story>\n\n";
+   S();
+   while(next_token() != "eofm")
+   {
+      if(next_token() == "CONNECTOR" ){ //|| next_token() == "WORD1" || next_token() =="PRONOUN"
+        S();
+      }
+   } // end of while
+}
+// Function prototypes
+
+
+// Grammar: <s> ::= [CONNECTOR] <noun> SUBJECT <after subject>
+// Done by:
+void S()
+{
+   cout << "Processing <s>";
+   if(next_token() == "CONNECTOR")
+   {
+      match("CONNECTOR");
+   }
+   noun();
+   match("SUBJECT");
+   after_subject();
+}
+
+// Grammar: <after subject> ::= <verb> <tense> PERIOD | <noun> <after noun>
+// Done by:
+void after_subject()
+{
+   cout << "Processing <after subject>\n";
+   if(next_token() == "WORD2"){
+      verb();
+      tense();
+      match("PERIOD");
+   }
+   else if(next_token() == "WORD1" || next_token() == "PRONOUN"){
+      noun();
+      after_noun();
+   }
+   else{
+    syntaxerror2(saved_lexeme, "after subject");
+   }
+   
+}
+// Grammar: <after noun> ::= <be> PERIOD | DESTINATION <verb> <tense> PERIOD | OBJECT <after object>
+// Done by:
+void after_noun()
+{
+   cout << "Processing <after noun>\n";
+   if(next_token() == "IS" ||next_token() ==  "WAS"){
+      be();
+      match("PERIOD");
+   }
+   else if(next_token() == "DESTINATION"){
+      match("DESTINATION");
+      verb();
+      tense();
+      match("PERIOD");
+   }
+   else if(next_token() == "OBJECT"){
+      match("OBJECT");
+      after_object();
+   }
+   else{
+    syntaxerror2(saved_lexeme, "after noun");
+   }
+}
+
+// Grammar: <after object> ::= <verb> <tense> PERIOD  |  <noun> DESTINATION <verb> <tense> PERIOD
+// Done by:
+void after_object()
+{
+   cout << "Processing <after object>\n";
+   if(next_token() == "WORD2"){
+      verb();
+      tense();
+      match("PERIOD");
+   }
+   else if(next_token() == "WORD1" || next_token() == "PRONOUN"){
+      noun();
+      match("DESTINATION");
+      verb();
+      tense();
+      match("PERIOD");
+   }
+   else{
+    syntaxerror2(saved_lexeme, "after object");
+   }
+}
+
+// Grammar: <noun> ::= WORD1 | PRONOUN
+// Done by:
+void noun()
+{
+   cout << "Processing <noun>\n";
+   if(next_token() == "WORD1")
+   {
+      match("WORD1");
+   }
+   else if (next_token() == "PRONOUN")
+   {
+      match("PRONOUN");
+   }
+   else{
+    syntaxerror2(saved_lexeme, "noun");
+   }
+}
+
+// Grammar: <verb> ::= WORD2
+// Done by:
+void verb()
+{
+   cout << "Processing <verb>\n";
+   match("WORD2");
+}
+
+// Grammar: <be> ::= IS | WAS
+// Done by:
+void be()
+{
+   cout << "Processing <be>\n";
+   if(next_token() == "IS")
+   {
+      match("IS");
+   }
+   else if (next_token() == "WAS")
+   {
+      match("WAS");
+   }
+   else{
+     syntaxerror2(saved_lexeme, "be");
+   }
+}
+
+// Grammar: <tense> := VERBPAST | VERBPASTNEG | VERB | VERBNEG
+// Done by:
+void tense()
+{
+   cout << "Processing <tense>\n";
+   if(next_token() == "VERBPAST")
+   {
+      match("VERBPAST");
+   }
+   else if (next_token() == "VERBPASTNEG")
+   {
+      match("VERBPASTNEG");
+   }
+   else if(next_token() == "VERB")
+   {
+      match("VERB");
+   }
+   else if (next_token() == "VERBNEG")
+   {
+      match("VERBNEG");
+   }
+   else{
+    syntaxerror2(saved_lexeme, "tense");
+   }
+}
+
 string filename;
+
 //----------- Driver ---------------------------
+
 // The new test driver to start the parser
-// Done by: **
+// Done by:  Jose Romero
 int main()
 {
-  cout << "Enter the input file name: ";
-  cin >> filename;
-  fin.open(filename.c_str());
-//** calls the <story> to start parsing
-//** closes the input file
+   cout << "Enter the input file name: ";
+   cin >> filename;
+   fin.open(filename.c_str());
+   if (!fin.is_open()) {
+      cout << "Error opening file: " << filename << endl;
+      return 1;  // Exit with an error code
+    }
+  //** calls the <story> to start parsing
+  story();
+  fin.close();
+  return 0;
 }// end
 //** require no other input files!
 //** syntax error EC requires producing errors.txt of error messages
