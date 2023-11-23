@@ -44,6 +44,13 @@ std::unordered_map<std::string, std::string> reservedWords = {
         {"eofm", "eofm"}
     };
 
+
+/* Look for all **'s and complete them */
+
+//=====================================================
+// File scanner.cpp written by: Group Number: **
+//=====================================================
+
 // --------- Two DFAs ---------------------------------
 
 
@@ -111,7 +118,6 @@ bool word(string& token_type,string& s)
   //iteriate the characters of the string
   while (s[charpos] != '\0') 
     {
-
       //q0 transitions
       if(state == 0){
         if(isConsonant(s[charpos])){ //bghkmpr
@@ -264,8 +270,11 @@ bool word(string& token_type,string& s)
 
 
   // where did I end up????
-  if (state == 0 || state == 7 || state == 8) return(true);  
-   else return(false);
+  if (state == 0 || state == 7 || state == 8){
+    return(true);  
+  }
+  else 
+    return(false);
 }// end of mytoken
 
 
@@ -289,13 +298,7 @@ bool period(string s)
   if (state == 1)return true;  // end in a final state 
   else return false; 
 }
-void s();
-void afterSubject();
-void afterNoun();
-void afterObject();
-void noun();
-void verb();
-void be();
+
 void tense();
 fstream fin;   // file stream to use
 int scanner(string& token_type,string& w)
@@ -342,13 +345,13 @@ cat scanner.cpp parser.cpp > myparser.cpp
 // ** Need syntaxerror1 and syntaxerror2 functions (each takes 2 args)
 // to display syntax error messages as specified by me.
 // Type of error: **
-// Done by: **
+// Done by: Alexa McGinnis
 void syntaxerror1(string word, string unexpected){ 
-  cout << "\nSYNTAX ERROR: unexpected " << word << " found in " << unexpected << endl;
+  cout << "\nSYNTAX ERROR: expected " << word << " but found in " << unexpected << endl;
   exit(1);
 }
 // Type of error: **
-// Done by: **
+// Done by: Alexa McGinnis
 void syntaxerror2(string word, string unexpected ) { 
   cout << "\nSYNTAX ERROR: unexpected " << word << " found in " << unexpected << endl;
   exit(1);
@@ -373,10 +376,7 @@ string next_token(){
 // Done by: Ruben Cerda
 bool match(string expected) {
     if(next_token() != expected){
-      if(next_token() == "ERROR"){
-        syntaxerror1(saved_lexeme, expected);
-        return false;
-      }
+      syntaxerror1(expected, saved_lexeme);
     }
     else{
         token_available = false;
@@ -389,7 +389,7 @@ bool match(string expected) {
 // ** Be sure to put the corresponding grammar rule above each function
 // ** Be sure to put the name of the programmer above each function
 // Grammar: **
-// Done by: **
+// Done by: Alexa McGinnis
 void story()
 {
    cout << "Processing <story>\n\n";
@@ -405,7 +405,7 @@ void story()
 
 
 // Grammar: <s> ::= [CONNECTOR] <noun> SUBJECT <after subject>
-// Done by:
+// Done by: Jose Romero
 void S()
 {
    cout << "Processing <s>";
@@ -419,7 +419,7 @@ void S()
 }
 
 // Grammar: <after subject> ::= <verb> <tense> PERIOD | <noun> <after noun>
-// Done by:
+// Done by: Ruben Cerda
 void after_subject()
 {
    cout << "Processing <after subject>\n";
@@ -438,7 +438,7 @@ void after_subject()
    
 }
 // Grammar: <after noun> ::= <be> PERIOD | DESTINATION <verb> <tense> PERIOD | OBJECT <after object>
-// Done by:
+// Done by: Ruben Cerda
 void after_noun()
 {
    cout << "Processing <after noun>\n";
@@ -462,7 +462,7 @@ void after_noun()
 }
 
 // Grammar: <after object> ::= <verb> <tense> PERIOD  |  <noun> DESTINATION <verb> <tense> PERIOD
-// Done by:
+// Done by: Ruben Cerda
 void after_object()
 {
    cout << "Processing <after object>\n";
@@ -484,7 +484,7 @@ void after_object()
 }
 
 // Grammar: <noun> ::= WORD1 | PRONOUN
-// Done by:
+// Done by: Ruben Cerda
 void noun()
 {
    cout << "Processing <noun>\n";
@@ -502,7 +502,7 @@ void noun()
 }
 
 // Grammar: <verb> ::= WORD2
-// Done by:
+// Done by: Jose Romero
 void verb()
 {
    cout << "Processing <verb>\n";
@@ -510,7 +510,7 @@ void verb()
 }
 
 // Grammar: <be> ::= IS | WAS
-// Done by:
+// Done by: Jose Romero
 void be()
 {
    cout << "Processing <be>\n";
@@ -528,7 +528,7 @@ void be()
 }
 
 // Grammar: <tense> := VERBPAST | VERBPASTNEG | VERB | VERBNEG
-// Done by:
+// Done by: Jose Romero
 void tense()
 {
    cout << "Processing <tense>\n";
