@@ -45,12 +45,6 @@ std::unordered_map<std::string, std::string> reservedWords = {
     };
 
 
-/* Look for all **'s and complete them */
-
-//=====================================================
-// File scanner.cpp written by: Group Number: **
-//=====================================================
-
 // --------- Two DFAs ---------------------------------
 
 
